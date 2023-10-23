@@ -1,0 +1,25 @@
+Base URL = https://l2q9y7q4g5.execute-api.us-east-1.amazonaws.com/dev/api/
+1. /createCustomer - POST
+        {
+            "stripeToken": "tok_1AbCdEfGhIjKlmNoPqRsTuVw",
+            "customerEmail": "customer@example.com"
+        }
+
+2. /cancel-sub/:subscriptionId - GET
+        subscription - is the user subscriptionId
+
+3. /create-sub - POST
+        {
+            "customerId": "cus_OCaRfEiZgEuxc3",
+            "planId": "price_1NQ5V7CTDrgWKuqSJVo4nwwn"
+        }
+
+4. /product-details - GET
+
+5. /sub-by-email - POST
+        {
+            "email": "abdul123@gmail.com"
+        }
+
+6. /subscriptions/:subscriptionId - GET
+        subscription - is the user subscriptionId

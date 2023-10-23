@@ -1,0 +1,481 @@
+service: finest50
+
+frameworkVersion: "3"
+
+plugins:
+  - serverless-offline
+  - serverless-plugin-warmup
+
+custom:
+  warmup:
+    default:
+      enabled: true
+      folderName: ".warmup"
+      cleanFolder: false
+      memorySize: 256
+      events:
+        - schedule: rate(3 minutes)
+      package:
+        individually: true
+        patterns:
+          - "./*.warmup/**"
+      prewarm: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  memorySize: 512
+  region: us-east-1
+  timeout: 20
+
+  environment:
+    AWSS_ACCESS_KEY: "AKIAZNNPNRVRUPPHTVOP"
+    AWSS_SECRET_KEY: "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"
+    REGION: "us-east-1"
+    SEND_GRID_KEY: "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"
+    BASE_URL: "https://l2q9y7q4g5.execute-api.us-east-1.amazonaws.com/dev"
+    JWT_SECRET: "jwtSecretajdu2848n"
+    VERIFICATION_SID: "VAf6c943e4dd6621e097856c97611c14dd"
+    TWILIO_SID: "AC89d3a26b2998b7ae7c9310b71dc9d0c5"
+    TWILIO_TOKEN: "2818a185996d5ef15efe975c4144375a"
+    STRIPE_API_KEY: "sk_test_51IuCkbCTDrgWKuqS6mJMboSbuQq5fSKnAWabFMfH2AoNcGmWATVvrebMp0k7e2a6IcQmAQcEPCrJzCZWwkqE3ZYM00Xq3MMwvV"
+    STRAPI_URL: "http://finest50-strapi-app-env.eba-piibfmpv.us-east-1.elasticbeanstalk.com/api/"
+
+package:
+  individually: true
+  patterns:
+    - "!node_modules/**"
+    - "!package-lock.json"
+    - "!package.json"
+    - "!serverless1.yml"
+    - "!registers"
+    - "!src/**"
+    - "!REAMDE.md"
+    - "!new"
+    - "!package"
+    - "!main.js"
+
+functions:
+  register:
+    warmup:
+      default:
+        enabled: true
+    handler: src/api/auth/register.handler
+    package:
+      include:
+        - src/api/auth/register.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/register
+          method: POST
+          cors:
+            origin: "*"
+
+  login:
+    handler: src/api/auth/login.handler
+    package:
+      include:
+        - src/api/auth/login.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:7
+    events:
+      - http:
+          path: /api/login
+          method: POST
+          cors:
+            origin: "*"
+
+  forgetPassword:
+    handler: src/api/auth/forgetPassword.handler
+    package:
+      include:
+        - src/api/auth/forgetPassword.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/forget-password
+          method: POST
+          cors:
+            origin: "*"
+
+  resetPassword:
+    handler: src/api/auth/resetPassword.handler
+    package:
+      include:
+        - src/api/auth/resetPassword.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/reset-password/{id}
+          method: POST
+          cors:
+            origin: "*"
+
+  resetToken:
+    handler: src/api/auth/resetToken.handler
+    package:
+      include:
+        - src/api/auth/resetToken.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/reset-token
+          method: POST
+          cors:
+            origin: "*"
+
+  verifyEmail:
+    handler: src/api/auth/verifyEmail.handler
+    package:
+      include:
+        - src/api/auth/verifyEmail.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/verify-otp
+          method: POST
+          cors:
+            origin: "*"
+
+  fireBaseGoogle:
+    handler: src/api/auth/firebaseAuth.handler
+    package:
+      include:
+        - src/api/auth/firebaseAuth.js
+        - src/utils/**
+        - src/api/auth/finest50.json
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:8
+    events:
+      - http:
+          path: /api/firebase-google
+          method: GET
+          cors:
+            origin: "*"
+
+  checkVerified:
+    handler: src/api/auth/checkVerified.handler
+    package:
+      include:
+        - src/api/auth/checkVerified.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:8
+    events:
+      - http:
+          path: /api/check-verified/{id}
+          method: GET
+          cors:
+            origin: "*"
+
+  sendOtp:
+    handler: src/api/auth/sendOtp.handler
+    package:
+      include:
+        - src/api/auth/sendOtp.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/send-otp
+          method: POST
+          cors:
+            origin: "*"
+
+  bankDetails:
+    handler: src/api/userInfo/bankDetails.handler
+    package:
+      include:
+        - src/api/userInfo/bankDetails.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/bank-details
+          method: PUT
+          cors:
+            origin: "*"
+
+  GetBankDetails:
+    handler: src/api/userInfo/getBankDetails.handler
+    package:
+      include:
+        - src/api/userInfo/getBankDetails.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/bank-details
+          method: GET
+          cors:
+            origin: "*"
+
+  personalInfo:
+    handler: src/api/userInfo/personalInfo.handler
+    package:
+      include:
+        - src/api/userInfo/personalInfo.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/personal-info/{id}
+          method: PUT
+          cors:
+            origin: "*"
+
+  getPersonalInfo:
+    handler: src/api/userInfo/getPersonalInfo.handler
+    package:
+      include:
+        - src/api/userInfo/getPersonalInfo.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/personal-info
+          method: GET
+          cors:
+            origin: "*"
+
+  professionalInfo:
+    handler: src/api/userInfo/professionalInfo.handler
+    package:
+      include:
+        - src/api/userInfo/professionalInfo.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/professional-info
+          method: PUT
+          cors:
+            origin: "*"
+
+  userSocialMediaDetails:
+    handler: src/api/userInfo/userSocialInfo.handler
+    package:
+      include:
+        - src/api/userInfo/userSocialInfo.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/social-media-details
+          method: POST
+          cors:
+            origin: "*"
+
+  GetuserSocialMediaDetails:
+    handler: src/api/userInfo/getUserSocialInfo.handler
+    package:
+      include:
+        - src/api/userInfo/getUserSocialInfo.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/social-media-details
+          method: GET
+          cors:
+            origin: "*"
+
+  questionCategory:
+    handler: src/api/question/category.handler
+    package:
+      include:
+        - src/api/question/category.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/categories
+          method: GET
+          cors:
+            origin: "*"
+
+  getAllCategories:
+    handler: src/api/question/getAllCategories.handler
+    package:
+      include:
+        - src/api/question/getAllCategories.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/categories-list
+          method: GET
+          cors:
+            origin: "*"
+
+  randomQuestion:
+    handler: src/api/question/randomQuestions.handler
+    package:
+      include:
+        - src/api/question/randomQuestions.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/questions
+          method: POST
+          cors:
+            origin: "*"
+
+  answerQuestion:
+    handler: src/api/question/answer.handler
+    package:
+      include:
+        - src/api/question/answer.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/verify-answers
+          method: POST
+          cors:
+            origin: "*"
+
+  answerQuestion2:
+    handler: src/api/question/answer2.handler
+    package:
+      include:
+        - src/api/question/answer2.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:13
+    events:
+      - http:
+          path: /api/verify-answers2
+          method: POST
+          cors:
+            origin: "*"
+
+  createSubscription:
+    handler: src/api/stripe/createSub.handler
+    package:
+      include:
+        - src/api/stripe/createSub.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/create-sub
+          method: POST
+          cors:
+            origin: "*"
+
+  cancelSubscription:
+    handler: src/api/stripe/cancelSub.handler
+    package:
+      include:
+        - src/api/stripe/cancelSub.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/cancel-sub/{subscriptionId}
+          method: GET
+          cors:
+            origin: "*"
+
+  createCustomer:
+    handler: src/api/stripe/createCustomer.handler
+    package:
+      include:
+        - src/api/stripe/createCustomer.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/createCustomer
+          method: POST
+          cors:
+            origin: "*"
+
+  getProduct:
+    handler: src/api/stripe/getProduct.handler
+    package:
+      include:
+        - src/api/stripe/getProduct.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/product-details
+          method: GET
+          cors:
+            origin: "*"
+
+  getSubByEmail:
+    handler: src/api/stripe/getSubByEmail.handler
+    package:
+      include:
+        - src/api/stripe/getSubByEmail.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/sub-by-email
+          method: POST
+          cors:
+            origin: "*"
+
+  getSubscription:
+    handler: src/api/stripe/getSubscription.handler
+    package:
+      include:
+        - src/api/stripe/getSubscription.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/subscriptions/{subscriptionId}
+          method: GET
+          cors:
+            origin: "*"
+
+  createProduct:
+    handler: src/api/stripe/createProduct.handler
+    package:
+      include:
+        - src/api/stripe/createProduct.js
+        - src/utils/**
+    layers:
+      - arn:aws:lambda:us-east-1:647297338723:layer:package:14
+    events:
+      - http:
+          path: /api/createProduct
+          method: POST
+          cors:
+            origin: "*"
