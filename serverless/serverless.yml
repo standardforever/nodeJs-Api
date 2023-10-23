@@ -29,17 +29,17 @@ provider:
   timeout: 20
 
   environment:
-    AWSS_ACCESS_KEY: "AKIAZNNPNRVRUPPHTVOP"
-    AWSS_SECRET_KEY: "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"
-    REGION: "us-east-1"
-    SEND_GRID_KEY: "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"
-    BASE_URL: "https://l2q9y7q4g5.execute-api.us-east-1.amazonaws.com/dev"
-    JWT_SECRET: "jwtSecretajdu2848n"
-    VERIFICATION_SID: "VAf6c943e4dd6621e097856c97611c14dd"
-    TWILIO_SID: "AC89d3a26b2998b7ae7c9310b71dc9d0c5"
-    TWILIO_TOKEN: "2818a185996d5ef15efe975c4144375a"
-    STRIPE_API_KEY: "sk_test_51IuCkbCTDrgWKuqS6mJMboSbuQq5fSKnAWabFMfH2AoNcGmWATVvrebMp0k7e2a6IcQmAQcEPCrJzCZWwkqE3ZYM00Xq3MMwvV"
-    STRAPI_URL: "http://finest50-strapi-app-env.eba-piibfmpv.us-east-1.elasticbeanstalk.com/api/"
+    AWSS_ACCESS_KEY: 
+    AWSS_SECRET_KEY: 
+    REGION:
+    SEND_GRID_KEY: 
+    BASE_URL: 
+    JWT_SECRET: 
+    VERIFICATION_SID:
+    TWILIO_SID: 
+    TWILIO_TOKEN: 
+    STRIPE_API_KEY: 
+    STRAPI_URL:
 
 package:
   individually: true
